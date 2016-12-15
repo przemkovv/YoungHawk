@@ -52,15 +52,22 @@ int main()
 	logger->debug("{}", json2.dump(2));
 
 
-	//crow::SimpleApp app;
 
-	//CROW_ROUTE(app, "/")([&json2]() {
-	//	return json2.dump(2);
-	//});
-
-	//app.port(18080).multithreaded().run();
 
 	do_stuff_db();
+
+	crow::SimpleApp app;
+
+	CROW_ROUTE(app, "/")([&json2]() {
+		return json2.dump(2);
+	});
+
+	CROW_ROUTE(app, "/<int>")([](const crow::request& req) {
+		req.url_params.get("aaa");
+		return crow::response(200, "A");
+	});
+
+	app.port(18080).multithreaded().run();
 
 	return 0;
 }
